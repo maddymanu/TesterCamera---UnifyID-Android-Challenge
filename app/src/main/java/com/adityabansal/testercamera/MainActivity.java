@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             releaseCameraAndPreview();
 
 			/* open mCamera */
-            mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+            mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
             Log.d("safeC", "being called inside");
 
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
     private void releaseCameraAndPreview() {
         if (mCamera != null) {
             mCamera.release();
+            mPreview.mHolder.removeCallback(mPreview);
             mCamera = null;
         }
     }
@@ -170,11 +171,24 @@ public class MainActivity extends AppCompatActivity {
         // liberate the camera
         if (mCamera != null) {
             mCamera.stopPreview();
+            mPreview.mHolder.removeCallback(mPreview);
             mCamera.release();
             mCamera = null;
         }
 
         super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mPreview.mHolder.removeCallback(mPreview);
+            mCamera.release();
+            mCamera = null;
+        }
+
+        super.onPause();
     }
 
 }
@@ -273,10 +287,13 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // Surface will be destroyed when we return, so stop the preview.
         if (mCamera != null) {
+            mHolder.removeCallback(this);
             mCamera.stopPreview();
+            mCamera.release();
         }
     }
 
