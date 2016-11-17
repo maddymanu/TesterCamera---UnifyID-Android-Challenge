@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import io.paperdb.Paper;
+//import io.paperdb.Paper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Paper.init(getApplicationContext());
+//        Paper.init(getApplicationContext());
 
         //TODO - IMPORTANT - REMOVE this line for PROD/Deployment
-        Paper.book().destroy();
+//        Paper.book().destroy();
 
         super.onCreate(savedInstanceState);
 
@@ -65,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         Log.d("Inside PictureT", "Saving encoded Pic");
                         String encoded = Base64.encodeToString(data, Base64.DEFAULT);
-                        saveToFile(encoded);
+
+                        //TODO - IMPORTANT - Commented out saving code because of Kryo Serialization
+//                        saveToFile(encoded);
                     }
                 });
                 savePic.start();
@@ -106,14 +108,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     //FUNCNTION that prints all encoded image strings
-    private void printDetails() {
+/*    private void printDetails() {
         final Set<String> savedImageStrings = Paper.book().read("savedImageStrings", new HashSet<String>());
         for (String s : savedImageStrings) {
             Log.d("Paper Svaed : ", s);
         }
-    }
+    }*/
 
 
+/*
     public void saveToFile(String encoded) {
 
         final Set<String> savedImageStrings = Paper.book().read("savedImageStrings", new HashSet<String>());
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         Paper.book().write("savedImageStrings", savedImageStrings);
 
     }
+*/
 
 
     @Override
